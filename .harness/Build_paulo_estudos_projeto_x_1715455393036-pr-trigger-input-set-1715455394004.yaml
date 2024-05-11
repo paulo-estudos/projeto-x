@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_paulo_estudos_projeto_x_1715455393036-pr-trigger-input-set
+  identifier: Build_paulo_estudos_projeto_x_1715455393036prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_paulo_estudos_projeto_x_1715455393036
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
