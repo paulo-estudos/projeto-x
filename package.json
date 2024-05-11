@@ -1,0 +1,20 @@
+{
+  "name": "auth_checker",
+  "version": "1.0.0",
+  "description": "aplicacao que valida JWT Tokens",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "auth_checker"
+  },
+  "author": "paulo roberto",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
