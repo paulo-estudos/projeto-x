@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /usr/src/app
 
 # Copie o diretório node_modules do diretório /harness
-COPY /harness/node_modules ./node_modules
+COPY ./node_modules ./node_modules
 
 # Copie o restante dos arquivos da aplicação
 COPY . .
