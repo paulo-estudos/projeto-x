@@ -30,13 +30,26 @@ pipeline:
                   identifier: test
                   name: test
                   spec:
+                    shell: Sh
                     command: npm run test
                   timeout: ""
                   type: Run
+                  when:
+                    stageStatus: Success
+                    condition: "false"
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: paulodocker
+                    repo: paulothelibertines/projeto-x
+                    tags:
+                      - latest
           platform:
-            arch: Amd64
             os: Linux
+            arch: Amd64
           runtime:
-            spec: {}
             type: Cloud
+            spec: {}
         type: CI
