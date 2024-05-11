@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_paulo_estudos_projeto_x_1715455393036-push-trigger-input-set
+  identifier: Build_paulo_estudos_projeto_x_1715455393036pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_paulo_estudos_projeto_x_1715455393036
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
