@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 const SECRET_KEY = 'segredo';
 
 // Middleware para analisar corpos de solicitação JSON
-app.use(express.json());
+app.use(express.text());
 
 // Função para verificar se um número é primo
 function isPrime(num) {
@@ -24,55 +24,77 @@ function isPrime(num) {
 
 // Rota para criar um JWT
 app.post('/generate-jwt', (req, res) => {
-    const { name, role, seed } = req.body;
+    const body = req.body;
+
+    console.log("Dados recebidos:", body);
+
+    // Verificar se req.body é uma string JSON
+    if (typeof req.body === 'string') {
+        try {
+            // Fazer o parse da string JSON para obter o objeto JSON
+            const bodyObj = JSON.parse(req.body);
+            Name = bodyObj.Name;
+            Role = bodyObj.Role;
+            Seed = bodyObj.Seed;
+        } catch (error) {
+            console.error("Erro ao fazer o parse da string JSON:", error.message);
+            res.status(400).json({ error: 'Erro ao fazer o parse da string JSON' });
+            return;
+        }
+    }
 
     try {
-        // Verificando os requisitos antes de criar o JWT
-        if (!/^[a-zA-Z]+$/.test(name) || name.length > 256) {
-            throw new Error('A claim "Name" deve conter apenas letras e ter no máximo 256 caracteres.');
-        }
+    // const token = jwt.sign({ Name, Role, Seed }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ Name, Role, Seed }, SECRET_KEY, { expiresIn: '1h' });
 
-        if (!['Admin', 'Member', 'External'].includes(role)) {
-            throw new Error('A claim "Role" deve ser uma das seguintes: Admin, Member, External.');
-        }
-
-        if (!isPrime(seed)) {
-            throw new Error('A claim "Seed" deve ser um número primo.');
-        }
-
-        const token = jwt.sign({ Name: name, Role: role, Seed: seed }, SECRET_KEY, { expiresIn: '1h' });
+        console.log("Token gerado:", token);
         res.json({ token });
     } catch (error) {
+        console.error("Erro ao gerar token:", error.message);
         res.status(400).json({ error: error.message });
     }
 });
 
-// Rota para verificar um JWT
+
 app.post('/verify-jwt', (req, res) => {
-    const { token } = req.body;
+    const token = req.body; // Aqui estamos pegando o token do corpo da requisição
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        // Verificando se todas as claims estão presentes
-        if (!decoded.Name || !decoded.Role || !decoded.Seed) {
-            throw new Error('O JWT não contém todas as claims necessárias.');
+        if (!token) { // Verificando se o token foi fornecido
+            throw new Error('Token não fornecido');
         }
-        // Verificando as regras específicas para cada claim
-        if (!/^[a-zA-Z]+$/.test(decoded.Name) || decoded.Name.length > 256) {
-            throw new Error('A claim "Name" não atende aos requisitos.');
+        
+        // Verificar se o token é válido (sem necessidade de chave secreta)
+        const decoded = jwt.decode(token, { complete: true });
+
+        // Verificar se existem exatamente 3 claims
+        if (!decoded.payload || Object.keys(decoded.payload).length !== 3) {
+            res.send('falso');
+            return;
         }
-        if (!['Admin', 'Member', 'External'].includes(decoded.Role)) {
-            throw new Error('A claim "Role" não atende aos requisitos.');
+        const { Name, Role, Seed } = decoded.payload;
+        // Verificar a regra para a claim 'Name'
+        if (!/^[a-zA-Z ]+$/.test(Name) || Name.length > 256) {
+            res.send('falso');
+            return;
         }
-        if (!isPrime(decoded.Seed)) {
-            throw new Error('A claim "Seed" não atende aos requisitos.');
+        // Verificar a regra para a claim 'Role'
+        if (!['Admin', 'Member', 'External'].includes(Role)) {
+            res.send('falso');
+            return;
         }
-        res.json({ decoded });
+        // Verificar a regra para a claim 'Seed'
+        if (!isPrime(Seed)) {
+            res.send('falso');
+            return;
+        }
+        // Se todas as verificações passarem, o token é válido
+        res.send('verdadeiro');
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        // Se ocorrer um erro durante a verificação, o token é inválido
+        res.send('falso');
     }
 });
-
 // Iniciando o servidor
 app.listen(PORT, () => {
     console.log(`Servidor em execução na porta ${PORT}`);
