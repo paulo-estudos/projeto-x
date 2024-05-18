@@ -11,7 +11,7 @@ COPY ./node_modules ./node_modules
 COPY . .
 
 # Exponha a porta que a aplicação vai usar
-EXPOSE 3000
+EXPOSE 80
 
 # Comando para iniciar a aplicação
 CMD [ "node", "app.js" ]
