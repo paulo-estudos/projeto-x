@@ -14,4 +14,4 @@ COPY . .
 EXPOSE 80
 
 # Comando para iniciar a aplicação
-CMD [ "node", "app.js" ]
+CMD [ "node", "index.js" ]
