@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 const SECRET_KEY = 'segredo';
 
 // Middleware para analisar corpos de solicitação JSON
