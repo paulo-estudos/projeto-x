@@ -2,7 +2,7 @@ const request = require('supertest');
 const fs = require('fs');
 const { verifyJwt, isPrime } = require('./index');
 
-describe('Testes para a função isPrime', () => {
+describe('Testes Unitarios', () => {
   it('Deve retornar true para números primos', () => {
     expect(isPrime(2)).toBe(true);
     expect(isPrime(3)).toBe(true);
