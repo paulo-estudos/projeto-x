@@ -49,6 +49,7 @@ function verifyJwt(token){
         return 'verdadeiro';
     } catch (error) {
         // Se ocorrer um erro durante a verificação, o token é inválido
+        console.log(error);
         return 'falso';
     }
 }
@@ -56,8 +57,8 @@ function verifyJwt(token){
 // Rota para verificar um JWT
 app.post('/verify-jwt', (req, res) => {
     const token = req.body; // Aqui estamos pegando o token do corpo da requisição
-    
     const result= verifyJwt(token);
+    console.log(result);
     res.send(result);
 });
 
