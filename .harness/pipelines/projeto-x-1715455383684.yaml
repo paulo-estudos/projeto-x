@@ -28,15 +28,19 @@ pipeline:
                   type: Run
               - step:
                   identifier: test
-                  name: test
+                  name: Teste Unitario e Integracao
                   spec:
                     shell: Sh
-                    command: npm run test
+                    command: npm run test:all
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - test-reports/junit.xml
                   timeout: ""
                   type: Run
                   when:
                     stageStatus: Success
-                    condition: "false"
               - step:
                   type: BuildAndPushDockerRegistry
                   name: BuildAndPushDockerRegistry_1
