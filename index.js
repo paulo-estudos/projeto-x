@@ -30,30 +30,25 @@ function verifyJwt(token){
 
         // Verificar se existem exatamente 3 claims
         if (!decoded.payload || Object.keys(decoded.payload).length !== 3) {
-            console.log('falso 1');
             return 'falso';
         }
         const { Name, Role, Seed } = decoded.payload;
         // Verificar a regra para a claim 'Name'
         if (!/^[a-zA-Z ]+$/.test(Name) || Name.length > 256) {
-            console.log('falso 2');
             return 'falso';
         }
         // Verificar a regra para a claim 'Role'
         if (!['Admin', 'Member', 'External'].includes(Role)) {
-            console.log('falso 3');
             return 'falso';
         }
         // Verificar a regra para a claim 'Seed'
         if (!isPrime(Seed)) {
-            console.log('falso 4');
             return 'falso';
         }
         // Se todas as verificações passarem, o token é válido
         return 'verdadeiro';
     } catch (error) {
         // Se ocorrer um erro durante a verificação, o token é inválido
-        console.log(error);
         return 'falso';
     }
 }
