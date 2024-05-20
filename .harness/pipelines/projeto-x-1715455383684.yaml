@@ -57,31 +57,3 @@ pipeline:
             type: Cloud
             spec: {}
         type: CI
-    - stage:
-        name: Terraform
-        identifier: Terraform
-        description: ""
-        type: Custom
-        spec:
-          execution:
-            steps:
-              - step:
-                  type: TerraformPlan
-                  name: TerraformPlan
-                  identifier: TerraformPlan
-                  spec:
-                    provisionerIdentifier: projetox
-                    configuration:
-                      command: Apply
-                      configFiles:
-                        store:
-                          spec:
-                            connectorRef: account.Github
-                            repoName: paulo-estudos/terraform-ecs
-                            gitFetchType: Branch
-                            branch: main
-                            folderPath: .
-                          type: Github
-                      secretManagerRef: harnessSecretManager
-                  timeout: 15m
-        tags: {}
